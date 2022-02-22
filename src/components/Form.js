@@ -1,4 +1,9 @@
 import React, { Component } from 'react'
+import Swal from 'sweetalert2'
+
+// CommonJS
+
+
 
 export default class Form extends Component {
     state = {
@@ -17,8 +22,9 @@ export default class Form extends Component {
             email: "",
             password: "",
             passwordConfirm: "",
-        }
-    }
+        },
+    };
+    Swal = require('sweetalert2')
 
     // THis function will take [name and value] of event to set new state for application
     onInputHandlerS1 = (name, value) => {
@@ -58,29 +64,79 @@ export default class Form extends Component {
 
         //Validate Password
         const passRe  = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-        if (name === "password" || name === "passwordConfirm"){
+        if (name === "password"){
             if (!passRe.test(value)){
                 newErrors[name] = name + " is in wrong format";
             }else{
                 newErrors[name] = "";
             }
         }
-        
-        
 
-
-        this.setState({
+        if (name === "passwordConfirm"){
+            if (this.state.values.password !== value){
+                newErrors[name] = name + " is in valid";
+            }else{
+                newErrors[name] = "";
+            }
+        }
+        
+        this.setState({...this.state,
             values: {...newValues,[name]:value},
             errors: {...newErrors}
         }, () => {
           console.log("state",this.state);
         })
     }
+
+    /*
+        VALIDATE SUBMIT
+        we can use properties "required" in react if we want
+        for external validation we can but "onSubmit" properties on <form> so that they can handle the submission
+            */
+    onSubmitHandler = (event)=>{
+        event.preventDefault();
+        let validErrors = true;
+        let validValue = true;
+        let valid = true;
+        for (const [key, value] of Object.entries(this.state.values)) {
+            if (value === ""){
+                valid = false;
+            }
+          }
+        for (const [key, value] of Object.entries(this.state.errors)) {
+            console.log([key,value])
+            if (value !== ""){
+            
+                valid = false;
+                
+            }
+          }
+          
+          //console.log("validErrors",validErrors,"validValue",validValue)
+         // let valid = validErrors && validValue;
+          console.log("newSubmitHandler",valid);
+        if (valid === false){
+            Swal.fire({
+                title: 'Invalid!',
+                text: 'Do you want to continue',
+                icon: 'error',
+                confirmButtonText: 'Next'
+              })
+        }else{
+            Swal.fire({
+                title: 'SUCCESS!',
+                text: 'GOOD TO SEE YOU',
+                icon: 'success',
+                confirmButtonText: 'Next'
+              })
+            
+        }
+    }
     render() {
         return (
             <div className="container">
                 <h2>User Profile</h2>
-                <form>
+                <form onSubmit={this.onSubmitHandler}>
                     <div className='row'>
                         <div className='col-6'>
                             <div className="group">
@@ -151,10 +207,8 @@ export default class Form extends Component {
                     </div>
 
                     <div>
-                        <button type="submit" className="btn text-white bg-dark w-100">Submit</button>
+                        <button type="submit" className="btn text-white bg-dark w-100" >Submit</button>
                     </div>
-
-
                 </form>
 
             </div>
