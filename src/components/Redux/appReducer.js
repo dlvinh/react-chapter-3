@@ -1,24 +1,30 @@
 import { compose } from "redux"
 import { DarkTheme } from "../Themes/DarkTheme"
 import { LightTheme } from "../Themes/LightTheme"
-import { add_task_type } from "./ActionTypes/actionType"
+import { add_task_type, edit_task_type, update_task_type } from "./ActionTypes/actionType"
 
 
 const todoListState = {
     taskList: [
         {
+            id: 1,
             taskName: "ABCD",
             done: false // true: done, false: undone
         },
         {
+            id: 2,
             taskName: "12345",
             done: false // true: done, false: undone
         },
         {
+            id: 3,
             taskName: "2903480",
             done: false // true: done, false: undone
         },
-    ]
+    ],
+    editedTask:  {
+       // true: done, false: undone
+    }
 
 }
 const toDoThemeState = {
@@ -45,13 +51,13 @@ export const toDoListReducer = (state = todoListState, action) => {
     switch (action.type) {
         
         case add_task_type: {
-            console.log(action) // Check what action is
+            
             let newTaskList  = [...state.taskList];
             newTaskList.push(action.newTask);
             return {...state,taskList:newTaskList};
         } break;
         case "CHECK": {
-            console.log(state)
+            
             let taskList = [...state.taskList]
             //console.log(cloneState === state)
             let index = taskList.findIndex(task => task.taskName === action.checkedTask.taskName);
@@ -59,13 +65,29 @@ export const toDoListReducer = (state = todoListState, action) => {
             return { ...state, taskList };
         }; break;
         case "DELETE_TASK":{
-            console.log("asdlakj")
+            
             let taskList = [...state.taskList]
 
             //console.log(cloneState === state)
             let index = taskList.findIndex(task => task.taskName === action.removedTask.taskName);
             taskList.splice(index,1);
             return { ...state, taskList };
+        };break;
+        case edit_task_type:{
+           // console.log(action)
+            let index = state.taskList.findIndex(task => task.taskName === action.editedTask.taskName);
+            let task  = state.taskList[index];
+            //console.log(task);
+            return {...state,editedTask:task}
+        }
+        case update_task_type:{
+            console.log(action);
+            let cloneTaskList = [...state.taskList]
+            let index = state.taskList.findIndex(task=> task.id === action.updatedTask.id);
+            cloneTaskList[index].taskName = action.updatedTask.taskName;
+            console.log(cloneTaskList)
+            console.log({...state,taskList:cloneTaskList});
+            return {...state,taskList:cloneTaskList}
         }
         default: return { ...state }
     }

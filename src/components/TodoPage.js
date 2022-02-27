@@ -31,12 +31,11 @@ class TodoPage extends Component {
                         <br></br>
                         <div className='align-top'>
 
-                            <Input className='w-50' required name="taskName" onChange={(e)=>{
+                            <Input id="input-task" className='w-50' required name="taskName" onChange={(e)=>{
                                 // Need this to update local State of text box so that Button can get the entered data and pass to event
                                 this.setState({
                                     taskName: e.target.value
                                 })
-
                             }}></Input>
                             <Button className='ml-2' onClick={this.props.onAddNewTask.bind(this,this.state.taskName)}><i className="fa fa-plus"></i> Add Task </Button>
                             <Button className='ml-1'><i className="fa fa-upload"></i> Upload Task </Button>
@@ -50,11 +49,8 @@ class TodoPage extends Component {
                         <h2>COMPLETED TASK</h2>
                         <TaskDone></TaskDone>
                     </Container>
-                    {/* <Modal></Modal> */}
+                    
                 </ThemeProvider>
-
-
-
 
             </div>
         )
@@ -64,7 +60,7 @@ class TodoPage extends Component {
 const mapStateToProps = (state) => {
     return {
         themeState: state.themeStateReducer.DarkTheme,
-        toDoState: state.toDoStateReducer
+        toDoState: state.toDoStateReducer.taskList
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -76,12 +72,19 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(action);
         },
         onAddNewTask: (task) => {
+            
+            if (task.trim() === ""){
+                return alert("please input task");
+            }
+            let id = new Date()
             let newTask = {
+                id: id.getDay() + id.getTime(),
                 taskName: task,
                 done:false
             }
-            let action = addNewTask(newTask) // addNewTask is a function in ActionList.js which return an object {type, newTask} 
-            dispatch(action)
+            let action = addNewTask(newTask) // addNewTask is a function in ActionList.js which return an object {type, newTask} ]
+           dispatch(action)
+           
         }
     }
 }

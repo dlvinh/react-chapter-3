@@ -3,7 +3,7 @@ import { Button } from './StyledComponents/Button'
 import { Table, Tbody, Tr, Td } from './StyledComponents/Table'
 import { connect } from 'react-redux'
 import Modal from './Modal'
-import { deleteTask } from './Redux/Actions/ActionList'
+import { deleteTask, editTask } from './Redux/Actions/ActionList'
 
 class ToDoTask extends Component {
     renderTask = () => {
@@ -12,10 +12,7 @@ class ToDoTask extends Component {
                 {task.taskName}
                 <div className='task-function-container'>
                     <Button className='ml-1'  onClick={this.props.onCheckTask.bind(this,task)}><i className="fa fa-check"></i> Check</Button>
-                    <Button className='ml-1' data-toggle="modal" data-target="#editTaskModal" onClick={(e)=>{
-                        console.log(e)
-                            return <Modal></Modal>
-                    }}> <i className="fa fa-edit"></i> Edit</Button>
+                    <Button className='ml-1' data-toggle="modal" data-target="#editTaskModal" onClick={this.props.onEditTask.bind(this,task)}> <i className="fa fa-edit"></i> Edit</Button>
                     <Button className='ml-1' onClick={this.props.onDeleteTask.bind(this,task)}><i className="fa fa-trash-alt"></i> Delete</Button>
                 </div>
             </Td>
@@ -32,6 +29,7 @@ class ToDoTask extends Component {
                         </Tr>
                     </Tbody>
                 </Table>
+                <Modal></Modal>
             </div>
         )
     }
@@ -49,6 +47,10 @@ const mapDispatchToProps = (dispatch) => {
         onDeleteTask: (task)=>{
             let action = deleteTask(task);
             console.log(action)
+            dispatch(action);
+        },
+        onEditTask: (task)=>{
+            let action = editTask(task);
             dispatch(action);
         }
     }
