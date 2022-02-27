@@ -3,10 +3,11 @@ import { Button } from './StyledComponents/Button'
 import { Table, Tbody, Tr, Td } from './StyledComponents/Table'
 import { connect } from 'react-redux'
 import Modal from './Modal'
+import { deleteTask } from './Redux/Actions/ActionList'
 
 class ToDoTask extends Component {
     renderTask = () => {
-        return this.props.taskList.filter(task => task.done).map((task, index) => {
+        return this.props.taskList.filter(task => !task.done).map((task, index) => {
             return <Td key={index} scope="row" className='d-flex justify-content-between'>
                 {task.taskName}
                 <div className='task-function-container'>
@@ -46,10 +47,8 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(action);
         },
         onDeleteTask: (task)=>{
-            let action ={
-                type:"DELETE",
-                removedTask: task
-            }
+            let action = deleteTask(task);
+            console.log(action)
             dispatch(action);
         }
     }

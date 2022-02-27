@@ -10,16 +10,12 @@ import TaskDone from './TaskDone'
 import { DarkTheme } from './Themes/DarkTheme'
 import { LightTheme } from './Themes/LightTheme'
 import Modal from './Modal'
+import { addNewTask } from './Redux/Actions/ActionList'
 class TodoPage extends Component {
-    // darkTheme = {
-    //     bgColor: '#343a40',
-    //     color: '#fff',
-    //     borderButton: '1px solid #fff',
-    //     borderRadiusButton: 'none',
-    //     hoverTextColor: '#343a40',
-    //     hoverBgColor: '#fff',
-    //     borderColor: '#343a40'
-    // }
+
+    state = {
+        taskName: ""
+    }
 
     render() {
         console.log(this.props.themeState)
@@ -34,24 +30,30 @@ class TodoPage extends Component {
                         <Label>New Task</Label>
                         <br></br>
                         <div className='align-top'>
-                            <form onSubmit={this.props.onAddNewTask}>
-                                <Input className='w-50' required name="toDoTask"></Input>
-                                <Button className='ml-2' type='submit'><i className="fa fa-plus"></i> Add Task </Button>
-                                <Button className='ml-1'><i className="fa fa-upload"></i> Upload Task </Button>
-                            </form>
+
+                            <Input className='w-50' required name="taskName" onChange={(e)=>{
+                                // Need this to update local State of text box so that Button can get the entered data and pass to event
+                                this.setState({
+                                    taskName: e.target.value
+                                })
+
+                            }}></Input>
+                            <Button className='ml-2' onClick={this.props.onAddNewTask.bind(this,this.state.taskName)}><i className="fa fa-plus"></i> Add Task </Button>
+                            <Button className='ml-1'><i className="fa fa-upload"></i> Upload Task </Button>
+
 
                         </div>
                         <hr style={{ borderColor: 'white' }} />
                         <h2>TO DO LIST </h2>
                         <ToDoTask></ToDoTask>
                         <hr style={{ borderColor: 'white' }} />
-                        <h2>TASK DONE</h2>
+                        <h2>COMPLETED TASK</h2>
                         <TaskDone></TaskDone>
                     </Container>
                     {/* <Modal></Modal> */}
                 </ThemeProvider>
 
-               
+
 
 
             </div>
@@ -73,12 +75,12 @@ const mapDispatchToProps = (dispatch) => {
             }
             dispatch(action);
         },
-        onAddNewTask: (event) => {
-
-            let action = {
-                type: "ADD_TASK",
-                newTask: event,
+        onAddNewTask: (task) => {
+            let newTask = {
+                taskName: task,
+                done:false
             }
+            let action = addNewTask(newTask) // addNewTask is a function in ActionList.js which return an object {type, newTask} 
             dispatch(action)
         }
     }
