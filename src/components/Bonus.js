@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 export default function Bonus() {
   const {userStake} = useSelector(state => state.appStateReducer)
-  console.log(userStake)
+  //console.log(userStake)
   return (
     <div className='text-center mb-5'>
         <h1>

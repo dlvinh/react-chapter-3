@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from './Card'
 import { useSelector } from 'react-redux';
 import appReducer from '../redux/appReducerStore';
 export default function BettingPlate() {
+
 
     /**
      * Note: khi su dung useSelector thay the cho mapStateToProps,
@@ -11,9 +12,10 @@ export default function BettingPlate() {
     const {userBetList} = useSelector(state => state.appStateReducer)
 //    console.log(userBetList) uncomment to see 
     const renderBetingCard = ()=>{
+     //   console.log("userBetList",userBetList)
        return userBetList.map((item, index)=>{
             return  <div className='col-4' key={index}>
-            <Card  img={item.img} callAmount={item.amount}></Card>
+            <Card  img={item.img} callAmount={item.amount}  bettingValue={item}></Card>
         </div>
         })
     }
