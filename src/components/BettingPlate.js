@@ -10,7 +10,7 @@ export default function BettingPlate() {
      * ta can tao store nhu thuong va khi dung state ben duoi no se tu dong di toi store va lay state ra
      */
     const {userBetList} = useSelector(state => state.appStateReducer)
-//    console.log(userBetList) uncomment to see 
+ console.log(userBetList)// uncomment to see 
     const renderBetingCard = ()=>{
      //   console.log("userBetList",userBetList)
        return userBetList.map((item, index)=>{

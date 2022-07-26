@@ -15,7 +15,7 @@ export default function DicingPlate() {
   return (
     <React.Fragment>
       <div className='dice-list text-center'>
-        <div className='row' style={{ padding: "80px 30px" }}>
+        <div className='row' style={{ padding: "0px 30px" }}>
           <div className='col-12 '>
             <Dice diceImg={diceList[0].img}></Dice>
           </div>

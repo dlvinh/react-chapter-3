@@ -70,8 +70,8 @@ const appState = {
         { id: "nai", img: "./img/nai.png" },
         { id: "cua", img: "./img/cua.png" },
         { id: "tom", img: "./img/tom.png" },
-    ]
-
+    ],
+    lose: false
 }
 
 const appReducer = (state = appState, action) => {
@@ -93,6 +93,7 @@ const appReducer = (state = appState, action) => {
             let newDiceList= [];
             let newUserBetList = [...state.userBetList];
             let newStake= state.userStake;
+            let loseCLone = state.lose;
             for (let i=0; i < 3; i++){
                 let randNum = Math.floor(Math.random() * 6); // random number from 0-5
                 let newDice = {
@@ -125,9 +126,18 @@ const appReducer = (state = appState, action) => {
             newUserBetList.map((bet,index)=>{
                 bet.amount = 0
             })
+            if (newStake == 0){
+                loseCLone = true
+            }
             //console.log("new",newUserBetList)
 
-            return {...state,diceList: newDiceList,userStake:newStake,userBetList:newUserBetList};
+            return {...state,diceList: newDiceList,userStake:newStake,userBetList:newUserBetList, lose: loseCLone};
+        }
+        case "RESTART":{
+            console.log("ReSTART");
+            let cloneuserBetList = state.userBetList;
+            cloneuserBetList = INITAL_USER_BET_LIST
+            return {...state, userStake:1000, lose: false, userBetList:cloneuserBetList }
         }
         default: return { ...state }
     }
